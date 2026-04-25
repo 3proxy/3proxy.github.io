@@ -1,0 +1,28 @@
+Eugene: Re: 3proxy 0.6 + iODBC + PostgreSQL  22.11.2007 19:04:23
+ 	 	 	 	 	Наконец-то я разобрался и запустил.
+1. Я использовал пакет unixODBC.
+2. /etc/unixODBC/odbc.ini
+[proxy]
+Description             = PostgreSQL ODBC driver
+Driver                  = PostgreSQL ODBC driver
+Database                = proxy
+ServerName              = localhost
+3. /etc/unixODBC/odbcinst.ini
+[PostgreSQL ODBC driver]
+Description             = PostgreSQL ODBC driver
+Driver          = /usr/local/lib/psqlodbcw.so
+Setup           = /usr/lib/libodbcpsqlS.so
+4. Собирал вручную psqlodbc-08.02.0500, слитый с postgresql.org (получился psqlodbcw.so).
+5. 3proxy.conf
+log &proxy,logger,123
+logformat "LINSERT INTO logger (ldatetime,username,userip,trafin,trafout,service,host,port,
+url) VALUES ('%Y-%m-%d %H:%M:%S','%U','%C',
+'%I','%O','%N',
+'%n','%r','%T');"
+
+То есть пароли и логины в odbc.ini прописывать не надо - система падает на драйвере ODBC.
+Использовать libiodbc тоже не надо - система падает на libiodbc.so.
+
+Все вышесказанное справедливо для unixODBC + psqlodbc производства postgresql.org, как с -DSAFESQL, так и без оного.
+С myodbc + unixODBC проблем не наблюдалось никаких.
+Шаманство, в общем ;) 
