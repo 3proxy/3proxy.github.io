@@ -232,9 +232,6 @@ udppm</b> UDP portmapper</p>
 <p style="margin-left:6%; margin-top: 1em">Options: <b><br>
 -p</b><i>NUMBER</i> change default server port to NUMBER
 <b><br>
--n</b> disable NTLM authentication (required if passwords
-are stored in Unix crypt format). <b><br>
--n1</b> enable NTLMv1 authentication. <b><br>
 
 -g(</b><i>GRACE_TRAFF</i><b>,</b><i>GRACE_NUM</i><b>,</b><i>GRACE_DELAY</i>)
 delay GRACE_DELAY milliseconds before polling if average
@@ -1046,8 +1043,7 @@ pwtype is one of: <br>
 none (empty) - use system authentication <b><br>
 CL</b> - password is cleartext <b><br>
 CR</b> - password is crypt-style password <b><br>
-NT</b> - password is NT password (in hex) <b><br>
-LM</b> - password is LM password (in hex) <br>
+NT</b> - password is NT password (in hex) <br>
 example: <br>
 users test1:CL:password1
 &quot;test2:CR:$1$lFDGlder$pLRb4cU2D7GAT58YQvY49.&quot; <br>
