@@ -7,8 +7,36 @@
 <table border="1">
 <!-- BEGIN NEWS -->
 <tr><td>Hot news:</td><td bgcolor="white">
-	<a href="//3proxy.ru/download/">3proxy 0.9.6</a> Released April, 11 2026.
+	<a href="//3proxy.ru/download/">3proxy 0.9.7</a> Released July, 4 2026.
 </td></tr><tr><td colspan="2" bgcolor="white">
+<b>0.9.7</b>
+<p>
+<p>
+<br>+ PCRE2 and SSL/TLS code moved from plugins into main 3proxy binary; dynamic linking with ssl/pcre by default, STATIC/LIBSTATIC options for static linking
+<br>+ Unix sockets support for parent proxies, tcppm, internal listeners and -i option; abstract (fileless) unix sockets on Linux
+<br>+ ssl_client_mode = 3 to use 'secure' parent types: https, tcps, socks5s, connect+s, etc.
+<br>+ New authcache types: cacheacl, dstaddr, dstport, dsthost, dstoper, srvaddr, srvport; authcache is now configurable per service
+<br>+ Hashtables for password lists and authcache, faster password lookups
+<br>+ 3proxy_crypt: new internal password hashing replacing mycrypt
+<br>+ udppm switched to hashtables and supports multiple connections
+<br>+ SOCKSv5 UDP parent support; -Ne/-Ni NAT options
+<br>+ Docker images for more platforms, signed; DLLs signed; public cert added to build
+<br>+ Grace sleep and linger on connection close; correctly process half-closed connections
+<br>+ Allow setting internal/external network namespaces on Linux
+<br>- icqpr/OSCAR code removed
+<br>! Fix: invalid error in SSL server handshake could break service state
+<br>! Fix: invalid offset in datafilters
+<br>! Fix: invalid socket in poll() could break sockmap() on Windows
+<br>! Fix: deadlock in ftppr
+<br>! Fix: crash on standalone services
+<br>! Fix: non-initialized mutex crash under Windows
+<br>! Fix: socks v5 parent with no auth
+<br>! Fix: hanging connections in sockmap; unneeded poll in sockmap
+<br>! Fix: symbols collision with OpenSSL could lead to crash
+<br>! Fix: compatibility with older SSL versions and older Windows (7 and below)
+<br>! Multiple minor bugfixes and code cleanup
+<!-- END NEWS -->
+<p>
 <b>0.9.6</b>
 <p>
 <br>+ ssl_client and multiple configuration options added to SSLPlugin, SSLPlugin code significantly improved and bugfixed. See https://github.com/3proxy/3proxy/wiki/SSLPlugin. 3proxy can now be used as stunnel replacement for many scenarios.
@@ -20,7 +48,6 @@
 <br>+ cmake environment added
 <br>! External pcre2 (pcre2-8) library is used for PCRE, pcre code is removed from 3proxy
 <br>! Multiple minor bugfixes%
-<!-- END NEWS -->
 <p>
 <b>0.9.5</b>
 <p>!!Security fix: proxy can potentially crash on on some platforms due to overlapping regions in strcpy()
