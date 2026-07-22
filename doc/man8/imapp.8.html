@@ -10,7 +10,7 @@
 	<script src="/js/bootstrap.bundle.min.js"></script>
 	<link rel="stylesheet" href="/style/main.css">
         <title>
-3proxy : Documentation : tlspr.8	</title>
+3proxy : Documentation : imapp.8	</title>
 
 	<meta name="Description" content="3proxy freeware proxy server for Windows and Unix. HTTP, SOCKS, FTP, POP3">
 	<meta name="keywords" content="3proxy, proxy, proxy server, free, freeware, socks, socks v5">
@@ -124,7 +124,7 @@ $(document).ready(function() {
 </head>
 <body>
 
-<h1 align="center">tlspr</h1>
+<h1 align="center">imapp</h1>
 
 <a href="#NAME">NAME</a><br>
 <a href="#SYNOPSIS">SYNOPSIS</a><br>
@@ -143,34 +143,29 @@ $(document).ready(function() {
 </h2>
 
 
-<p style="margin-left:6%; margin-top: 1em"><b>tlspr</b> -
-SNI proxy gateway service</p>
+<p style="margin-left:6%; margin-top: 1em"><b>imapp</b> -
+IMAPv4 proxy gateway service</p>
 
 <h2>SYNOPSIS
 <a name="SYNOPSIS"></a>
 </h2>
 
 
-<p style="margin-left:6%; margin-top: 1em"><b>tlspr</b>
-[<b>-d</b>][<b>-a</b>] [<b>-l</b>[[<i>@</i>]<i>logfile</i>]]
-[<b>-p</b><i>listening_port</i>]
-[<b>-P</b><i>destination_port</i>]
-[<b>-c</b><i>tls_check_level</i>]
-[<b>-i</b><i>internal_ip</i>]
-[<b>-e</b><i>external_ip</i>]</p>
+<p style="margin-left:6%; margin-top: 1em"><b>imapp</b>
+[<b>-d</b>] [<b>-l</b>[[<i>@</i>]<i>logfile</i>]]
+[<b>-p</b><i>port</i>] [<b>-i</b><i>internal_ip</i>]
+[<b>-e</b><i>external_ip</i>]
+[<b>-h</b><i>default_ip[:port]</i>] [<b>-x</b><i>]</i></p>
 
 <h2>DESCRIPTION
 <a name="DESCRIPTION"></a>
 </h2>
 
 
-<p style="margin-left:6%; margin-top: 1em"><b>tlspr</b> is
-an SNI gateway service (destination host is taken from TLS
-handshake). The destination port must be specified via the
--P option (or it may be detected with the Transparent
-plugin). tlspr does not support user authentication; use
-ACLs by client IP or a parent proxy with authentication if
-access control is required.</p>
+
+<p style="margin-left:6%; margin-top: 1em"><i><b>imapp</b></i>
+is IMAPv4 (IMAP4rev1) gateway service to allow internal
+users to access external IMAP servers.</p>
 
 <h2>OPTIONS
 <a name="OPTIONS"></a>
@@ -225,8 +220,8 @@ start/stop/accept error records.</p></td></tr>
 <td width="85%">
 
 
-<p style="margin-top: 1em">Never ask for username
-authentication</p> </td></tr>
+<p style="margin-top: 1em">Never look for username
+authentication.</p> </td></tr>
 <tr valign="top" align="left">
 <td width="6%"></td>
 <td width="3%">
@@ -266,11 +261,11 @@ file path (e.g. <i>/var/run/netns/myns</i> or
        cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="6%"></td>
-<td width="4%">
+<td width="3%">
 
 
 <p><b>-i</b></p></td>
-<td width="5%"></td>
+<td width="6%"></td>
 <td width="85%">
 
 
@@ -278,122 +273,59 @@ file path (e.g. <i>/var/run/netns/myns</i> or
 connections to. By default, connections to any interface are
 accepted. It&acute;s usually unsafe. Unix domain sockets can
 be specified with <i>-iunix:/path/to/socket</i> syntax
-(e.g., -iunix:/var/run/tlspr.sock). On Linux, abstract
+(e.g., -iunix:/var/run/imapp.sock). On Linux, abstract
 sockets use <i>-iunix:@socketname</i> syntax.</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-a</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">Anonymous. Hide information
-about client.</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-a1</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">Anonymous. Show fake information
-about client.</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-p</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">listening_port. Port proxy
-listens for incoming connections. Default is 1443.</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-P</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">destination_port. Port to
-establish outgoing connections. Required unless the
-Transparent plugin is used, because the TLS handshake does
-not contain port information. Default is 443.</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-c</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">TLS_CHECK_LEVEL. 0 (default) -
-allow non-TLS traffic to pass, 1 - require TLS, only check
-client HELLO packet, 2 - require TLS, check both client and
-server HELLO, 3 - require TLS, check that the server sends a
-certificate (not compatible with TLS 1.3), 4 - require
-mutual TLS, check that the server sends a certificate
-request and the client sends a certificate (not compatible
-with TLS 1.3)</p></td></tr>
-<tr valign="top" align="left">
-<td width="6%"></td>
-<td width="4%">
-
-
-<p style="margin-top: 1em"><b>-s</b></p></td>
-<td width="5%"></td>
-<td width="85%">
-
-
-<p style="margin-top: 1em">Split the TLS Client HELLO
-packet across multiple TCP segments to make SNI-based DPI
-detection harder. An optional numeric value can follow (e.g.
-<b>-s1</b>) to control the splitting behaviour.</p></td></tr>
-</table>
-
-<p style="margin-left:6%;"><b>-Ximap | -Xpop3 |
--Xsmtp</b></p>
-
-<p style="margin-left:15%;">STARTTLS mode for the given
-protocol. The proxy speaks the plaintext protocol with the
-client (greeting, capability advertisement with STARTTLS
-only, STARTTLS command), then, after the client issues
-STARTTLS and sends a TLS Client HELLO, connects to the
-destination taken from SNI (default port 143/110/587),
-performs STARTTLS negotiation with the destination server
-and transparently passes TLS traffic. If the destination
-server does not support STARTTLS, the TLS handshake with the
-client fails.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="6%"></td>
 <td width="3%">
 
 
-<p><b>-l</b></p></td>
+<p style="margin-top: 1em"><b>-p</b></p></td>
 <td width="6%"></td>
 <td width="85%">
 
 
-<p>Log. By default logging is to stdout. If <i>logfile</i>
-is specified logging is to file. Under Unix, if
-&acute;<i>@</i>&acute; precedes <i>logfile</i>, syslog is
-used for logging.</p></td></tr>
+<p style="margin-top: 1em">Port. Port proxy listens for
+incoming connections. Default is 143.</p></td></tr>
+<tr valign="top" align="left">
+<td width="6%"></td>
+<td width="3%">
+
+
+<p style="margin-top: 1em"><b>-h</b></p></td>
+<td width="6%"></td>
+<td width="85%">
+
+
+<p style="margin-top: 1em">Default destination. It&rsquo;s
+used if the target address is not specified by the user.</p></td></tr>
+<tr valign="top" align="left">
+<td width="6%"></td>
+<td width="3%">
+
+
+<p style="margin-top: 1em"><b>-x</b></p></td>
+<td width="6%"></td>
+<td width="85%">
+
+
+<p style="margin-top: 1em">Disable STARTTLS support.
+STARTTLS is not announced in the CAPABILITY response and the
+STARTTLS command is not accepted.</p></td></tr>
+<tr valign="top" align="left">
+<td width="6%"></td>
+<td width="3%">
+
+
+<p style="margin-top: 1em"><b>-l</b></p></td>
+<td width="6%"></td>
+<td width="85%">
+
+
+<p style="margin-top: 1em">Log. By default logging is to
+stdout. If <i>logfile</i> is specified logging is to file.
+Under Unix, if &acute;<i>@</i>&acute; precedes
+<i>logfile</i>, syslog is used for logging.</p></td></tr>
 <tr valign="top" align="left">
 <td width="6%"></td>
 <td width="3%">
@@ -414,11 +346,35 @@ You may want to try something like -S8192 if you experience
 </h2>
 
 
-<p style="margin-left:6%; margin-top: 1em">You should use a
-client with TLS support or configure a router to redirect
-TLS traffic to the proxy (transparent proxy). Configure the
-client to connect to <i>internal_ip</i> and <i>port</i>. If
-you need to limit clients, use <b>3proxy</b>(8) instead.</p>
+<p style="margin-left:6%; margin-top: 1em">You can use any
+MUA (Mail User Agent) with IMAPv4 support. Set the client to
+use <i>internal_ip</i> and <i>port</i> as an IMAP server.
+The address of the real IMAP server must be configured as a
+part of the IMAP username. The format for the username is
+<i>username</i>@<i>server</i>, where <i>server</i> is the
+address of the IMAP server and <i>username</i> is the
+user&acute;s login on this IMAP server. The login itself may
+contain an &acute;@&acute; sign. Supported client
+authentication methods are the LOGIN command, AUTHENTICATE
+PLAIN and AUTHENTICATE LOGIN. With the server, the proxy
+authenticates using the method chosen by the client if the
+server supports it (as advertised in the CAPABILITY
+response); otherwise it falls back to AUTHENTICATE LOGIN,
+AUTHENTICATE PLAIN or the LOGIN command, in this order of
+preference. Challenge-response authentication (CRAM-MD5,
+etc.) is not supported, because it requires a challenge from
+the server before we know which server to connect to. When
+running as a 3proxy service (not as a standalone binary),
+STARTTLS is supported and announced in the CAPABILITY
+response unless disabled with <b>-x</b>. After the client
+issues STARTTLS, the connection is handled by
+<b>tlspr</b>(8): the destination host is taken from the SNI
+of the client TLS handshake (or from the -h option), the
+proxy performs STARTTLS negotiation with the destination
+server, and then transparently passes TLS traffic between
+the client and the server. If the destination server does
+not support STARTTLS, the TLS handshake with the client
+fails.</p>
 
 <h2>BUGS
 <a name="BUGS"></a>
@@ -434,8 +390,8 @@ to <b>3proxy@3proxy.org</b></p>
 
 
 <p style="margin-left:6%; margin-top: 1em">3proxy(8),
-ftppr(8), proxy(8), socks(8), pop3p(8), smtpp(8), tcppm(8),
-udppm(8), syslogd(8), <br>
+ftppr(8), pop3p(8), proxy(8), smtpp(8), socks(8), tcppm(8),
+tlspr(8), udppm(8), syslogd(8), <br>
 https://3proxy.org/</p>
 
 <h2>AUTHORS
