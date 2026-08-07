@@ -7,8 +7,39 @@
 <table border="1">
 <!-- BEGIN NEWS -->
 <tr><td>Hot news:</td><td bgcolor="white">
-	<a href="//3proxy.ru/download/">3proxy 0.9.7</a> Released July, 4 2026.
+	<a href="//3proxy.ru/download/">3proxy 0.9.8</a> Released August, 7 2026.
 </td></tr><tr><td colspan="2" bgcolor="white">
+<b>0.9.8</b>
+<p>
+<p>
+<br>!! Fix: use-after-free on the ftp:// request path in HTTP proxy, a request buffer reallocation left a stale pointer; heap corruption, requires authenticated access
+<br>!! Fix: buffer overflow in radsend() with an oversized request hostname; RADIUS is experimental, log radius or auth radius with fakeresolve is required to reach it
+<br>!! Fix: buffer overflow in smtpp when relaying AUTH LOGIN credentials to a server which offers AUTH PLAIN only; requires authorised access to smtpp
+<br>!! Fix: out-of-bounds read in tlspr on a malformed TLS ClientHello
+<br>!! Fix: LDAP injection and unsafe counter file names in LdapPlugin; the plugin is unsupported and is not built with 3proxy
+<br>!! Fix: password and hash comparison in strong authentication is constant-time now
+<br>!! Fix: bounds validation and match/depth limits in pcre filters
+<br>+ imapp: IMAPv4 proxy added, supports LOGIN command, AUTH PLAIN and AUTH LOGIN
+<br>+ STARTTLS support for smtpp, pop3p, imapp and tlspr, on both client and server side; -x option to disable
+<br>+ wolfSSL is supported as an alternative TLS backend, WOLFSSL_CHECK=true selects it (wolfSSL must be built with --enable-opensslextra)
+<br>+ Chunked Transfer-Encoding from client is supported by HTTP proxy
+<br>+ dnspr: -F option added, fake resolve to redirect traffic
+<br>+ ucrt64 build support; static libraries support in Makefile.win
+<br>+ minimal and busybox Docker images switched to musl + wolfSSL
+<br>- splice() support is not built by default anymore, it is slower than the read/write path for most traffic; add -DWITHSPLICE to build it
+<br>! Fix: hashtable item was added with wrong index on table grow; with large username/password tables it could cause a single record to be missing
+<br>! Fix: race conditions; stack overflow on FreeBSD
+<br>! Fix: generated certificates are X.509 v3 with basicConstraints CA:FALSE and extendedKeyUsage serverAuth, required by Apple TLS stack and by Chrome on macOS/iOS
+<br>! Fix: dnspr was broken since udppm rewrite
+<br>! Fix: short cleartext passwords failed authentication
+<br>! Fix: parent negotiation after sending PROXY protocol header
+<br>! Fix: maxchild dropped to 100 on config reload if not set explicitly
+<br>! Fix: getrandom() is not used with glibc below 2.25
+<br>! Fix: IPV6_BOUND_IF definition for legacy MacOS
+<br>! Fix: cmake build, arm64 Docker build, Makefile.win with UCRT
+<br>! Multiple minor bugfixes and code cleanup
+<!-- END NEWS -->
+<p>
 <b>0.9.7</b>
 <p>
 <p>
@@ -35,7 +66,6 @@
 <br>! Fix: symbols collision with OpenSSL could lead to crash
 <br>! Fix: compatibility with older SSL versions and older Windows (7 and below)
 <br>! Multiple minor bugfixes and code cleanup
-<!-- END NEWS -->
 <p>
 <b>0.9.6</b>
 <p>
