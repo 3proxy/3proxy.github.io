@@ -7,8 +7,29 @@
 <table border="1">
 <!-- BEGIN NEWS -->
 <tr><td>Hot news:</td><td bgcolor="white">
-	<a href="//3proxy.ru/download/">3proxy 0.9.8</a> Released August, 7 2026.
+	<a href="//3proxy.ru/download/">3proxy 0.9.9</a> Released August, 20 2026.
 </td></tr><tr><td colspan="2" bgcolor="white">
+<b>0.9.9</b>
+<p>
+<p>
+<br>! Fix: DNS replies are validated now: a reply from an address other than the nameserver the query was sent to, and a reply with a question section not matching the query, are dropped; both were accepted before
+<br>! Fix: socket leak with SOCKSv5 UDP ASSOCIATE through a parent proxy, sockets were accumulated in CLOSE_WAIT state until descriptors ran out
+<br>! Fix: file descriptor leak in HTTP proxy on the ftp:// request path
+<br>! Fix: crash with illegal instruction on some platforms (e.g. some musl based Linux builds), caused by a memcpy on overlapping buffers
+<br>! Fix: extip and ha (HAProxy PROXY protocol) parents are applied to SOCKSv5 UDP ASSOCIATE now
+<br>! Fix: only socks5 and socks5+ parents are tried for UDP ASSOCIATE, other parent types can not be used for UDP
+<br>! Fix: udppm through a SOCKSv5 parent did not work
+<br>! Fix: -Ne and -Ni options were never applied, the option letter was not parsed; -Ne is not applied to the UDP ASSOCIATE reply anymore, -Ni is applied to it
+<br>! Fix: -4 / -6 handling for UDP in socks; a single UDP association can use both IPv4 and IPv6 destinations now
+<br>! Fix: a datagram with a null destination address is dropped now
+<br>! Fix: DNS over TCP: a reply which did not fit a single read was never processed
+<br>! Documentation: "How to apply ACLs to UDP traffic" added to HOWTO; authentication cache, ACL and UDP notes added to "Optimizing 3proxy for High Load" and to security recommendations
+<br>+ SOCKSv5 UDP: the destination of every datagram is authorized, so ACLs limiting the destination address, host name or port apply to UDP traffic now; the parent proxy and the external address are selected for the destination of the datagram and not for the UDP ASSOCIATE request
+<br>+ socks: -U option to control what happens when the destination changes within an UDP association: log it, authorize it, both (default) or neither
+<br>+ -C option (for TCP services) to terminate the session as soon as any of the sides closes the connection; by default the session is kept until both sides close it (TCP half-close)
+<br>+ timeouts: LINGER value added (11th, default 5), used to deliver buffered data after one of the sides has closed its sending side and as SO_LINGER value on outgoing connections
+<!-- END NEWS -->
+<p>
 <b>0.9.8</b>
 <p>
 <p>
@@ -38,7 +59,6 @@
 <br>! Fix: IPV6_BOUND_IF definition for legacy MacOS
 <br>! Fix: cmake build, arm64 Docker build, Makefile.win with UCRT
 <br>! Multiple minor bugfixes and code cleanup
-<!-- END NEWS -->
 <p>
 <b>0.9.7</b>
 <p>
