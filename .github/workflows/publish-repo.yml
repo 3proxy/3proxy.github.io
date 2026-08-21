@@ -1,0 +1,53 @@
+name: Publish package repository
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 5 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-repo
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install repository tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y createrepo-c apt-utils rpm dpkg-dev gnupg
+
+    - name: Import signing key
+      env:
+       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      run: |
+       if [ -z "$GPG_PRIVATE_KEY" ]; then echo "GPG_PRIVATE_KEY is not set"; exit 1; fi
+       printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+       KEYID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/{print $5; exit}')
+       if [ -z "$KEYID" ]; then echo "no secret key after import"; exit 1; fi
+       echo "GPG_KEYID=$KEYID" >> $GITHUB_ENV
+       echo "signing key: $KEYID"
+
+    - name: Build repository
+      env:
+       GH_TOKEN: ${{ github.token }}
+       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: ./tools/build-repo.sh
+
+    - name: Publish
+      run: |
+       if [ -z "$(git status --porcelain repo)" ]; then
+         echo "no repository changes"
+         exit 0
+       fi
+       git config user.name "github-actions[bot]"
+       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+       git add repo
+       git commit -m "repo: refresh package repository"
+       git push

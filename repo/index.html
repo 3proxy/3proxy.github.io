@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3proxy package repository</title>
+<style>
+body { font-family: sans-serif; max-width: 52em; margin: 2em auto; padding: 0 1em; line-height: 1.5; }
+pre { background: #f4f4f4; padding: 0.8em; overflow-x: auto; border-left: 3px solid #888; }
+code { background: #f4f4f4; padding: 0 0.2em; }
+table { border-collapse: collapse; }
+td, th { border: 1px solid #ccc; padding: 0.3em 0.6em; text-align: left; }
+</style>
+</head>
+<body>
+<h1>3proxy package repository</h1>
+
+<p>Signed apt and dnf repositories for 3proxy. Two channels are published:</p>
+
+<table>
+<tr><th>Channel</th><th>Branch</th><th>Contents</th></tr>
+<tr><td><code>lts</code></td><td>0.9</td><td>long term support releases</td></tr>
+<tr><td><code>current</code></td><td>master</td><td>current stable releases</td></tr>
+</table>
+
+<p>All packages and all repository metadata are signed with the 3proxy release
+key, <a href="3proxy-release-key.asc">3proxy-release-key.asc</a>:</p>
+
+<pre>pub   rsa4096 2026-08-21 [SC]
+      FC12 2144 99FC C7BA 1CFF  6CDC 0312 384E 3A73 940B
+uid   3proxy release signing &lt;3proxy@3proxy.org&gt;</pre>
+
+<h2>Debian, Ubuntu</h2>
+
+<pre>sudo curl -fsSL https://3proxy.org/repo/3proxy-release-key.asc \
+     -o /usr/share/keyrings/3proxy.asc
+
+sudo tee /etc/apt/sources.list.d/3proxy.sources &lt;&lt;EOF
+Types: deb
+URIs: https://3proxy.org/repo/deb
+Suites: lts
+Components: main
+Signed-By: /usr/share/keyrings/3proxy.asc
+EOF
+
+sudo apt update
+sudo apt install 3proxy</pre>
+
+<p>Use <code>Suites: current</code> for the current stable channel. The
+<code>Signed-By</code> field accepts an armoured key from apt 2.4 onwards
+(Debian 12, Ubuntu 22.04). On older releases, convert it first:</p>
+
+<pre>sudo gpg --dearmor -o /usr/share/keyrings/3proxy.gpg /usr/share/keyrings/3proxy.asc</pre>
+
+<p>and point <code>Signed-By</code> at the <code>.gpg</code> file.</p>
+
+<h2>RHEL, Fedora, and derivatives</h2>
+
+<pre>sudo tee /etc/yum.repos.d/3proxy.repo &lt;&lt;EOF
+[3proxy]
+name=3proxy \$basearch
+baseurl=https://3proxy.org/repo/rpm/lts/\$basearch/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://3proxy.org/repo/3proxy-release-key.asc
+EOF
+
+sudo dnf install 3proxy</pre>
+
+<p>Replace <code>lts</code> with <code>current</code> for the current stable
+channel. Both the packages (<code>gpgcheck</code>) and the repository metadata
+(<code>repo_gpgcheck</code>) are verified.</p>
+
+<p>32-bit ARM packages are published under <code>rpm/&lt;channel&gt;/arm/</code>.
+<code>$basearch</code> expands to <code>armv7hl</code> there, so set
+<code>baseurl</code> to that path explicitly.</p>
+
+<h2>What is in the repository</h2>
+
+<p>Only releases that ship a GPG-signed <code>SHA256SUMS</code> file are
+mirrored. Every package is checksum-verified against a signature made by a
+published 3proxy key before it is accepted, and is then re-signed with the
+current release key so that a single imported key covers the whole repository.
+Releases older than 0.9.9 carry no signed checksums and are not included; they
+remain available from the
+<a href="https://github.com/3proxy/3proxy/releases">GitHub releases page</a>.</p>
+
+</body>
+</html>
