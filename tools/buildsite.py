@@ -425,8 +425,8 @@ def main():
 
     for site_arg in args:
         site_dir = os.path.abspath(site_arg)
-        if not os.path.isdir(os.path.join(site_dir, 'include')):
-            print(f"ERROR: '{site_dir}' does not look like a site repo (missing include/)", file=sys.stderr)
+        if not os.path.isdir(os.path.join(site_dir, 'templates', 'include')):
+            print(f"ERROR: '{site_dir}' does not look like a site repo (missing templates/include/)", file=sys.stderr)
             sys.exit(1)
         build_site(site_dir, content_dir)
 
