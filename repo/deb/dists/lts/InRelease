@@ -1,0 +1,58 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64 arm64 armhf 
+Codename: lts
+Components: main
+Date: Sat, 22 Aug 2026 09:21:02 +0000
+Label: 3proxy
+Origin: 3proxy
+Suite: lts
+MD5Sum:
+ f2333ac81216b69bc2304f806d3c5914              143 Release
+ f6901d53f42db82176d6d3edfa6a0db8             1307 main/binary-amd64/Packages
+ 9f98a3392fef56193d91dc5e1d35e1a1              829 main/binary-amd64/Packages.gz
+ c068144e30a3782a78c2a9f788567dd4             1305 main/binary-arm64/Packages
+ 5e363e9122698b8457bb97a792cd66e6              823 main/binary-arm64/Packages.gz
+ e9f0cca1eb7d79babdf42170ecd45fca             1309 main/binary-armhf/Packages
+ cb9e0c751db8361a628069e1bb60c7c7              825 main/binary-armhf/Packages.gz
+SHA1:
+ 0e76ea678bde312a43df7336eb39009b947390cd              143 Release
+ 22e14d3b7cc0d57577621b771a3970630b0fab54             1307 main/binary-amd64/Packages
+ d9bfb81b7e49fad98d0bc535e78552fe6c15e027              829 main/binary-amd64/Packages.gz
+ 4cd6c0197959bb7c4597c5eb17c931a7630e6bd3             1305 main/binary-arm64/Packages
+ a15f483aa4e06e7908582432f16ffd724a5c70f8              823 main/binary-arm64/Packages.gz
+ 1313553ffaaf82bb3e5528cc6281bce5f1dbebf9             1309 main/binary-armhf/Packages
+ 1d1c7295a627d27966cd2b1d0bd11799ddcaff16              825 main/binary-armhf/Packages.gz
+SHA256:
+ f1a3c8327b304eee56cd0a85d6f899dc6237cafe0db3d1096ab5ef7861f9e4ce              143 Release
+ 07a85b6edb81704dda28afccd79e501094e87e9fb1b5ff87d2d0cdeb7d28f892             1307 main/binary-amd64/Packages
+ 62e182a2a37de196f525da21b07ef5b1db2dafc0c1a7622317506bab23a68e5b              829 main/binary-amd64/Packages.gz
+ 0325a59d5eebc87b3b9755e535a535d2228cfe70a43358282dc47a6b76fa2515             1305 main/binary-arm64/Packages
+ d2cda02cfe558c9ddcaf1ac185252ac5752214cc2443dd40ff091018dad9b359              823 main/binary-arm64/Packages.gz
+ 3544a72bb0f43e19d19616d62d843fab479aa7da3431060229008adc1698593c             1309 main/binary-armhf/Packages
+ 14527bbf6b45051a30d55812dd993368876bcffd1710e99bc9aa65afe392f887              825 main/binary-armhf/Packages.gz
+SHA512:
+ 43ae0e78158293256642604174a444f06499af18dbeab9e11337c20378dba3679f05b53a7650cc7a42e7d09b6ce2ee7508b76efa53cc8266741f24801f0d2372              143 Release
+ 01c9740aa541db26a06453b461da46b1677f172fe4636c39d46b23a8b12c1de4ca6edddea5df2561c35f8b121fd5cb683d75bf6f7f99c8af4231ef30760a2676             1307 main/binary-amd64/Packages
+ b40fd498d478109b0c34b55af6d6acb7a4723be77f19e5d78361fb80bb72aedc186c639ae06ac59cd38a2d1184e5e37455e6363c3be36c1ef3ced60c36bb4bec              829 main/binary-amd64/Packages.gz
+ 4536c1485ef140027339624dd04c29d3e9aefca9b91c213878a6644d695660ea00d450d7ecd76784755e018d71374d07bbd3adf215f59135cfad0cd676c4216c             1305 main/binary-arm64/Packages
+ 7d2e9957c657928ea60104646a7d70dca3e18f215003a3d377cb80cd3d5c75fd860d2ae76040c49abc086dbbe451b9a3a58f5c25c368851a6011d89ad31a15c0              823 main/binary-arm64/Packages.gz
+ 3bdb00638d674df706ddd90ec6d35309afc6003123c01e2078f09cc5a1bcaaeea3ae6d57549cac2f381a30775c683b37324b8961c173a84d628ec2f240f471f1             1309 main/binary-armhf/Packages
+ ef53beedc4c3a1f5b5d8adb269b6e83858142a4ff1f9ef0ed29cc931881b69c7e0ee4536535832dbcf078c6f90f67eafe3cea727284761996f457a4ce5f4c4c7              825 main/binary-armhf/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE/BIhRJn8x7oc/2zcAxI4TjpzlAsFAmqJaf4ACgkQAxI4Tjpz
+lAvnTw//XIWzSxWf2MNXimTfNTOO06n2FGYOA3NcBfybaIVHMtYpQsPblqHLttRg
+aE0XV0Ekyb/YznS/3isrgHiRcnZXAqprSLC/flGUkDTHgRodMlB8yZXxO9Y7MFxP
+EKhSCvlQ2T3UJ604D0Z4toqopOS0+8LLsHVElYAHfTcUM0uVd2Y+mzOCrxu6TcB9
+E1SP2xDCX1gPXbGcIrmaWRuDCWa+inja7wBFzSH5D0sQGvOdkePp+6ACbwOv/maB
+E/Au0Ty+T+O88w5KzCKE0M8AzyJax5WGc6Nt1asHb9FFXmWJBQmPWxXuJyiIcCkj
+V2Kd1Q97WvgmWLF/9BYpMEFj+PXTbbUDILT3Hozz/13wW8C/xCgWf/4RwtWRmd2p
+qw9mtPrMROfKDk/fQEFZhqP++AUcn6gvcmSBZ3Pg4czAoANSR1wK8tY9KQWyIciu
+kxsCc+6UWAjBIh55DBgzx7c/uoFAap0XCS1Nh5v/47bhVxqIKVUhYtmgAw5zMy4w
+/9nOu/ib+9PkEmnDVmwsye8LX1rpntB8whMUescijg2oHl+mafVTcQkgh/XVfDUx
+MwKIx7xBjEekwBnvTFYYwF0F4Nf6aMB+EmQ4+FzJaSVqOwmy4//nYe6JBkWxRawp
+Mejb3SZ+Kxhy6wP87NYc7tnY7HQt07wXia5tAjnhxWnlpN1ll7M=
+=i7PZ
+-----END PGP SIGNATURE-----
