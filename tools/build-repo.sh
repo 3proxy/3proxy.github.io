@@ -45,9 +45,8 @@ gpgsign() {
 	    -u "$GPG_KEYID" "$@"
 }
 
-# Verification keys: every key 3proxy has published, so releases signed with a
-# superseded key still validate.
-for k in 3proxy-release-key.asc 3proxy-release-key-ed25519.asc; do
+# Verification key, fetched from the source repository.
+for k in 3proxy-release-key.asc; do
 	if curl -fsSL "https://raw.githubusercontent.com/$SRC_REPO/master/$k" -o "$WORK/$k" 2>/dev/null; then
 		gpg --batch --quiet --import "$WORK/$k" 2>/dev/null || true
 	fi
@@ -176,14 +175,23 @@ for tag in $tags; do
 			b="${f##*/}"
 			arch=$(rpm -qp --qf '%{ARCH}' "$f" 2>/dev/null)
 			[ -n "$arch" ] || { echo "  ! cannot read arch of $b"; continue; }
-			[ -e "$RPMROOT/$chan/$arch/$b" ] && continue
-			mkdir -p "$RPMROOT/$chan/$arch"
-			cp "$f" "$RPMROOT/$chan/$arch/$b"
-			rpm --delsign "$RPMROOT/$chan/$arch/$b" >/dev/null 2>&1 || true
-			rpm --addsign "$RPMROOT/$chan/$arch/$b" >/dev/null
-			echo "  + rpm $chan/$arch/$b"
+			# Packages are published per Enterprise Linux major version,
+			# so that $releasever selects the right one.  Anything without
+			# a dist tag was not built against an EL base and would not
+			# install on one.
+			dist=$(rpm -qp --qf '%{RELEASE}' "$f" 2>/dev/null | sed 's/^[0-9]*\.//')
+			case "$dist" in
+			el*) ;;
+			*)   echo "  ! $b has no EL dist tag, skipping"; continue ;;
+			esac
+			[ -e "$RPMROOT/$chan/$dist/$arch/$b" ] && continue
+			mkdir -p "$RPMROOT/$chan/$dist/$arch"
+			cp "$f" "$RPMROOT/$chan/$dist/$arch/$b"
+			rpm --delsign "$RPMROOT/$chan/$dist/$arch/$b" >/dev/null 2>&1 || true
+			rpm --addsign "$RPMROOT/$chan/$dist/$arch/$b" >/dev/null
+			echo "  + rpm $chan/$dist/$arch/$b"
 			added=1
-			case "$touched" in *"rpm:$chan/$arch "*) ;; *) touched="$touched rpm:$chan/$arch " ;; esac
+			case "$touched" in *"rpm:$chan/$dist/$arch "*) ;; *) touched="$touched rpm:$chan/$dist/$arch " ;; esac
 		done
 	done
 done

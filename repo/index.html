@@ -59,7 +59,7 @@ sudo apt install 3proxy</pre>
 <pre>sudo tee /etc/yum.repos.d/3proxy.repo &lt;&lt;EOF
 [3proxy]
 name=3proxy \$basearch
-baseurl=https://3proxy.org/repo/rpm/lts/\$basearch/
+baseurl=https://3proxy.org/repo/rpm/lts/el\$releasever/\$basearch/
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1
@@ -72,9 +72,14 @@ sudo dnf install 3proxy</pre>
 channel. Both the packages (<code>gpgcheck</code>) and the repository metadata
 (<code>repo_gpgcheck</code>) are verified.</p>
 
-<p>32-bit ARM packages are published under <code>rpm/&lt;channel&gt;/arm/</code>.
-<code>$basearch</code> expands to <code>armv7hl</code> there, so set
-<code>baseurl</code> to that path explicitly.</p>
+<p>Debian packages are built on Ubuntu and require glibc 2.38 or later, so
+they install on Ubuntu 24.04 and newer.</p>
+
+<p>Packages are built against AlmaLinux 8, 9 and 10 and are published per
+Enterprise Linux major version, which is what <code>$releasever</code> selects.
+They apply equally to RHEL, Rocky and CentOS Stream of the same version.
+Enterprise Linux has no 32-bit ARM build, so armhf is available as a deb
+only.</p>
 
 <h2>What is in the repository</h2>
 
@@ -82,8 +87,8 @@ channel. Both the packages (<code>gpgcheck</code>) and the repository metadata
 mirrored. Every package is checksum-verified against a signature made by a
 published 3proxy key before it is accepted, and is then re-signed with the
 current release key so that a single imported key covers the whole repository.
-Releases older than 0.9.9 carry no signed checksums and are not included; they
-remain available from the
+Releases before signing was introduced carry no signed checksums and are not
+included; they remain available from the
 <a href="https://github.com/3proxy/3proxy/releases">GitHub releases page</a>.</p>
 
 </body>
