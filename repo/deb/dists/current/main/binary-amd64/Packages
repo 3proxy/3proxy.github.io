@@ -1,0 +1,21 @@
+Package: 3proxy
+Architecture: amd64
+Version: 1.0.0-260822121300
+Priority: optional
+Section: net
+Maintainer: z3APA3A <3apa3a@3proxy.org>
+Installed-Size: 1080
+Depends: libc6 (>= 2.34), libpcre2-8-0 (>= 10.32), libssl3 (>= 3.0.0~~alpha1)
+Filename: pool/current/main/3/3proxy/amd64/3proxy-1.0.0.x86_64.deb
+Size: 277984
+MD5sum: 23f21438044f50fa9e3b42689f1e9f83
+SHA1: 29271fc0c523693ab91df80dded843cf0dc2c865
+SHA256: a27525c24a7240895d5de8d5fa6b7489638a2b98aa1cee81cf1030163ab3d92b
+SHA512: 5ab63109b0f64dd2dd8562b413fe5f8b0b0349286ec1d68a39be42ef1be25151762b529e23e2300f980a8104ab3e40a2bce4a8d0849d79e67744ddc42d9ff24d
+Homepage: https://3proxy.org/
+Description: tiny free proxy server
+ 3Proxy tiny free proxy server is really tiny freeware proxy servers set.
+ It includes HTTP proxy with HTTPS and FTP support, SOCKSv4/SOCKSv4.5/SOCKSv5 proxy (socks/socks.exe), POP3 proxy, SMTP proxy, FTP proxy, caching DNS proxy, TCP and UDP portmappers.
+ You can use every proxy as a standalone program (socks, proxy, tcppm, udppm, pop3p) or use combined program (3proxy). Combined proxy additionally supports features like access control, bandwidth limiting, limiting daily/weekly/monthly traffic amount, proxy chaining, log rotation, syslog and ODBC logging, etc.
+ It's created to be small, simple and yet very functional.
+

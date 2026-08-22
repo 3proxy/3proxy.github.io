@@ -1,0 +1,58 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64 arm64 armhf 
+Codename: current
+Components: main
+Date: Sat, 22 Aug 2026 12:26:02 +0000
+Label: 3proxy
+Origin: 3proxy
+Suite: current
+MD5Sum:
+ 4698818a8379e1f8e18e2cd1df448bb9              151 Release
+ 51402530c4b9483a85f83040c51dbfa3             1307 main/binary-amd64/Packages
+ 9691d141ee6b71a877fcda3ca64fb058              829 main/binary-amd64/Packages.gz
+ 6d3b08f4a42bdbcf8a3ad35a489c6e0e             1305 main/binary-arm64/Packages
+ 0b0acc16590347a9a016cd38dea3ff48              824 main/binary-arm64/Packages.gz
+ 4e789d7f7180e2cc6d45f21cd13809c4             1309 main/binary-armhf/Packages
+ 86dcf2fb07102555ef2206d74ed7716a              828 main/binary-armhf/Packages.gz
+SHA1:
+ 130df98a6a71f0a05220a3e17838dd5d4e35bda0              151 Release
+ 79603c2f66a57b15c8bd690f735481ddfb1ec480             1307 main/binary-amd64/Packages
+ 61937396dea475b3315e5fe06ec384a277aa59d7              829 main/binary-amd64/Packages.gz
+ 7d9198f83fe55cbd8fa3ea820ec448de44dc8967             1305 main/binary-arm64/Packages
+ 29f2011cc4e1d9fc693c0b5899d04a3e829b0de7              824 main/binary-arm64/Packages.gz
+ a2a118e98f0d0677b4c96dbe8f5fb0438ba8e472             1309 main/binary-armhf/Packages
+ 1233b71766e29b709100f9355b9efc5edcc34ee8              828 main/binary-armhf/Packages.gz
+SHA256:
+ d0771889567ea0fa75a2de82906089086a072acb0465e8ad3053107194659467              151 Release
+ af401387f7c9d278d3aa03e8be5c03c4d649abdf78e22d64cc59f132962ffe95             1307 main/binary-amd64/Packages
+ 42f836097520cd720752cb31c7ac00503e5792ab9c476806f3621386be939a78              829 main/binary-amd64/Packages.gz
+ d05e50364263a8d6beeeb3a6333265b77b7e4c3e9d9aad47b370ba28557c74df             1305 main/binary-arm64/Packages
+ 31eab82f5a479502bc187ad6e3b262cb78cb2ca3fa2e50010627b61a8d37f610              824 main/binary-arm64/Packages.gz
+ b12e7eaf7a9408521c969f9c0b762cf46a0b05ca93a33d86a48def8de25d09a5             1309 main/binary-armhf/Packages
+ 804c52307151fa792601072f206af3c1abd896bdc8ab0f256c13733e026b5e56              828 main/binary-armhf/Packages.gz
+SHA512:
+ e417d732e6b91c69a97cfb86605cb4de4f51710b90c738d63f692d26e019b47f270102063d23cc96c9e548280993646525da07c3e594eacdd598783d657615fb              151 Release
+ 59f5d54142128c52277a493fed0f0ac0f2346b67638c15f52973d60fb924dbb769160caef9259663c9acbc52c1609c44ca3e1e0aeeba4bf422c1a88e0aebc6ee             1307 main/binary-amd64/Packages
+ 7e0b5be092f07e68955f0809568d0c255a59d658ee25a2745c891c4be7d30a65d1e68d03043506bc1f106e9b2f6bb18b6d19f5a7a8928374b50af5a660b47548              829 main/binary-amd64/Packages.gz
+ 6a31bd89c99876fb742034f355bb8560789c4a48b726b5cd206602bd2282298a82665c3dfecb8797a9dd0b4691af5599a75d70485b94ce5990d812c068187f99             1305 main/binary-arm64/Packages
+ 4fe28110b3ad21c1dc21618d33112b6b8f2fb59b4276786c145c86d89478e85845190b593e40c7a5e0e93738c4085d0bd4bec9c34ee9924ae8337cd6a5fcf514              824 main/binary-arm64/Packages.gz
+ 26678848c5cf2f482f3c8bccb6722ea4fa0ca7cf1e7e0e5eebedfd5f2c4c7c93fd28d5ff2bd55af06505befa77939c1f177475b4e14fb8a98d0588d2cbf86aa8             1309 main/binary-armhf/Packages
+ 216ed7d96c9d0d327de9ce0f31f2beaae3061890e2ecaa58289e649f454663e855edcc8bb5ba55623c1340744aa705fe89b45fe0534320dfee81ac05e7c7229c              828 main/binary-armhf/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE/BIhRJn8x7oc/2zcAxI4TjpzlAsFAmqJlVoACgkQAxI4Tjpz
+lAuUsw/+KgsfQNjfI9c3Z1Mp2tkQ8T0UMUvKMCBQoSLMUw6kTIaDFVNEfTa8bxEA
+ZYIM0Tue1VFltY4/yB/nOIqOJB/Obzwvzo+eC4X764YxZxOYs4ZbP36OBqj8BDeB
+ZYavxTeZVOfrxaeZoJOVg7EZe2/t6LCncx1rhAIsDiT+C6rHw4fuQB/JBruzhq5J
+AWnq1HODVdMd72JNKrZSv3DuunxQZHKeXZCIGpvQ/4fMcctYSzek0PbuaAW3o4tB
+ka7urQJIk3hk7ul1ZWX2v3qZmYRgQLD4M4EwaUwV1OmxCIH8TexpDU+zPTdy5bg/
+vdEqLWiu5BVPu6LUfBn5cExDWroWSU3aZYLWJjupW5UVO3GtfWfUkqXbsEj9OJwR
+W0INjPyG2ET37jmYG/bkFFOTv5k7jsEiPtoPfdUhqEbTwRukPPFOUuvZksm9R8Oa
+gN4Nhmc/XVMqXKVJX6BPc3qvcQEWznK/w5D6wNgHHlD3ULEF7F6ruoZLyDzycqrR
+a3kkT1k5H3QzYGnn/C79JoNTGoldF/oxbAIXhAe8ILBekh3E+VF7k+Z74jZWENdk
+XpZ1uK1kNCycqqMylFoIIAOe520pgOfce6Y1ZW7FMzUhU+/BghHPj3rjt5JEDFHq
+7p5kbHfuViTq97O8WFvecMt1/ZsuyhuUThcESo2i9WqfmUiKJF4=
+=k20Z
+-----END PGP SIGNATURE-----
