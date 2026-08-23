@@ -7,8 +7,24 @@
 <table border="1">
 <!-- BEGIN NEWS -->
 <tr><td>Hot news:</td><td bgcolor="white">
-	<a href="//3proxy.ru/download/">3proxy 0.9.9</a> Released August, 20 2026.
+	<a href="//3proxy.ru/download/">3proxy 1.0.0</a> Released August, 22 2026.
 </td></tr><tr><td colspan="2" bgcolor="white">
+<b>1.0.0</b>
+<p>
+<p>
+No changes in 3proxy code, this release only changes how packages are built, signed and published.
+<p>
+<br>! Fix: TLS, PCRE2 and PAM support was silently left out when 3proxy was built on a system whose /bin/sh is not dash, which is every RPM based distribution and macOS; the library checks built their test program with echo and escape sequences, which only dash expands, so every check failed and the features were dropped without a diagnostic
+<br>! Fix: rpm packages were built on Ubuntu and required glibc 2.38, libssl.so.3 and libpcre2-8, which no RPM based distribution provides, so they could not be installed anywhere; they are built against AlmaLinux 8, 9 and 10 now and carry an el8, el9 or el10 tag, covering RHEL, AlmaLinux, Rocky and CentOS Stream of the same version
+<br>! Fix: the rpm package depended on its own interpreter, /bin/3proxy, taken from the first line of the installed configuration file, and could not be installed on el9 or el10 because rpm resolves that dependency to /usr/bin/3proxy
+<br>! Fix: deb packages required glibc 2.38 and libssl3t64 and installed on Ubuntu 24.04 and newer only; they are built against Ubuntu 22.04 now and install on Ubuntu 22.04 and later as well as Debian 12 and later
+<br>+ Signed apt and dnf repositories are published at https://3proxy.org/repo/ in two channels: current, built from the master branch, and lts, built from the 0.9 branch; packages and repository metadata are both signed
+<br>+ Release binaries are published with SHA256 checksums, an OpenPGP signature and a GitHub build provenance attestation; docker images are signed and attested as well
+<br>+ The release signing key is an RSA-4096 key published as 3proxy-release-key.asc in the repository; rpm 4.14 and earlier can not import an Ed25519 key at all, which would leave RHEL 8 and its derivatives unable to verify anything
+<br>+ Packages are reproducible: rebuilding a release produces byte identical deb and rpm files, every timestamp is derived from the build date recorded for the release
+<br>- 32-bit ARM (armhf) is published as a deb package only, Enterprise Linux has no 32-bit ARM build
+<!-- END NEWS -->
+<p>
 <b>0.9.9</b>
 <p>
 <p>
@@ -28,7 +44,6 @@
 <br>+ socks: -U option to control what happens when the destination changes within an UDP association: log it, authorize it, both (default) or neither
 <br>+ -C option (for TCP services) to terminate the session as soon as any of the sides closes the connection; by default the session is kept until both sides close it (TCP half-close)
 <br>+ timeouts: LINGER value added (11th, default 5), used to deliver buffered data after one of the sides has closed its sending side and as SO_LINGER value on outgoing connections
-<!-- END NEWS -->
 <p>
 <b>0.9.8</b>
 <p>
