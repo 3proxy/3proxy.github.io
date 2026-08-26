@@ -156,6 +156,7 @@ $(document).ready(function() {
  <li><a href="#SSLPLUGIN">Как настроить TLS/SSL (https прокси, mTLS)</a></li>
  <li><a href="#CERTIFICATES">Как создать CA и сертификаты для SSL</a></li>
  <li><a href="#PCRE">Как использовать PCRE-фильтрацию (регулярные выражения)</a></li>
+ <li><a href="#TRANSPARENT">Как сделать транспарентный прокси</a></li>
  <li><a href="#AUTH">Как ограничить доступ к службе</a>
  <li><a href="#USERS">Как создать список пользователей</a>
  <li><a href="#ACL">Как ограничить доступ пользователей к ресурсам</a>
@@ -957,11 +958,31 @@ ssl_nocli
 &#35; Генерация закрытого ключа CA
 openssl genrsa -out ca.key 4096
 
+&#35; Расширения, без которых сертификат не годится как CA
+cat > ca.ext << 'EOF'
+basicConstraints=critical,CA:TRUE
+keyUsage=critical,keyCertSign,cRLSign
+subjectKeyIdentifier=hash
+EOF
+
 &#35; Генерация сертификата CA (действителен 10 лет)
-openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
+openssl req -new -nodes -key ca.key \
     -subj "/C=RU/ST=Region/L=City/O=MyOrg/CN=My CA" \
-    -out ca.crt
+    -out ca.csr
+openssl x509 -req -in ca.csr -signkey ca.key -sha256 -days 3650 \
+    -extfile ca.ext -out ca.crt
 </pre>
+<p>
+Расширения обязательны. Без <b>basicConstraints=CA:TRUE</b> и
+<b>keyCertSign</b> сертификат не принимается как CA, и клиент сообщает, что не
+может получить сертификат издателя. <b>subjectKeyIdentifier</b> — то, на что
+ссылаются подписанные этим CA сертификаты.
+</p>
+<p>
+Расширения задаются файлом, а не через <b>-addext</b>, потому что LibreSSL —
+команда <b>openssl</b> в macOS и некоторых BSD — обрабатывает -addext иначе,
+чем OpenSSL. Приведённый вариант одинаково работает в обоих.
+</p>
 <p>
 Для MITM импортируйте ca.crt в браузеры/ОС клиентов как доверенный корневой CA.
 </p>
@@ -995,7 +1016,17 @@ EOF
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
     -CAcreateserial -out server.crt -days 365 -sha256 \
     -extfile server.ext
+
+&#35; Проверка так же, как это делает современный клиент
+openssl verify -x509_strict -CAfile ca.crt server.crt
 </pre>
+<p>
+Проверять следует строго, потому что именно так проверяет клиент. OpenSSL 3
+добавляет идентификаторы ключей при подписании, а LibreSSL — нет, поэтому файл
+расширений запрашивает их явно. Python начиная с 3.13 проверяет строго и
+отвергает сертификат без <b>authorityKeyIdentifier</b>; другие клиенты идут тем
+же путём.
+</p>
 <p>
 Для публичного https:// прокси используйте CA вроде Let's Encrypt вместо самоподписанного.
 </p>
@@ -1015,6 +1046,8 @@ cat > client.ext << 'EOF'
 basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment
 extendedKeyUsage = clientAuth
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
 EOF
 
 &#35; Подписание CA
@@ -1037,8 +1070,14 @@ openssl pkcs12 -export -out client1.p12 \
 
 &#35; CA
 openssl genrsa -out ca.key 4096
-openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
-    -subj "/CN=3proxy CA" -out ca.crt
+cat > ca.ext << 'EOF'
+basicConstraints=critical,CA:TRUE
+keyUsage=critical,keyCertSign,cRLSign
+subjectKeyIdentifier=hash
+EOF
+openssl req -new -nodes -key ca.key -subj "/CN=3proxy CA" -out ca.csr
+openssl x509 -req -in ca.csr -signkey ca.key -sha256 -days 3650 \
+    -extfile ca.ext -out ca.crt
 
 &#35; Сервер
 openssl genrsa -out server.key 2048
@@ -1048,6 +1087,8 @@ basicConstraints=CA:FALSE
 keyUsage = keyEncipherment
 extendedKeyUsage = serverAuth
 subjectAltName = DNS:localhost,DNS:proxy,IP:127.0.0.1
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
 EOF
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
     -CAcreateserial -out server.crt -days 365 -sha256 -extfile server.ext
@@ -1058,12 +1099,188 @@ openssl req -new -key client.key -subj "/CN=client" -out client.csr
 cat > client.ext << 'EOF'
 basicConstraints=CA:FALSE
 extendedKeyUsage = clientAuth
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
 EOF
 openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key \
     -CAcreateserial -out client.crt -days 365 -sha256 -extfile client.ext
 openssl pkcs12 -export -out client.p12 -passout pass: \
     -inkey client.key -in client.crt -certfile ca.crt
+
+&#35; Оба должны пройти проверку, которую делает современный клиент
+openssl verify -x509_strict -CAfile ca.crt server.crt
+openssl verify -x509_strict -CAfile ca.crt client.crt
 </pre>
+
+
+ <li><a name="TRANSPARENT"><i>Как сделать транспарентный прокси</i></a>
+<p>
+Транспарентный прокси обслуживает клиентов, которые не настроены на работу
+через прокси. Пакетный фильтр перенаправляет их соединения на 3proxy, а команда
+<b>transparent</b> указывает сервису брать адрес назначения у фильтра, а не из
+запроса. Всё остальное работает как обычно: правила доступа, родительские
+прокси, ограничения и логирование видят настоящий адрес назначения. Работает в
+Linux и BSD. С версии 1.0.1 встроено в бинарник, раньше это был отдельный
+TransparentPlugin, и строка <b>plugin</b> больше не нужна.
+</p>
+<p>
+Команда даёт и адрес, и порт назначения, поэтому сервис обслуживает всё, что
+на него перенаправлено, а не один порт с одним адресом назначения.
+</p>
+<p>
+Без неё сервис берёт адрес откуда-то ещё: HTTP-прокси - из заголовка
+<b>Host</b>, порт-маппер - из своей конфигурации. Именно получение адреса от
+фильтра позволяет работать с остальными протоколами и делает адрес
+достоверным, а не заявленным клиентом.
+</p>
+<p>
+Нагляднее всего это с <b>tlspr</b>. Без перенаправления трафика (или без
+резолва имён на него через DNS) на него вообще ничего не попадёт. С
+перенаправлением он получает и имя из TLS handshake, и адрес назначения -
+именно это позволяет писать правила доступа по именам хостов: имя из handshake
+проверяется в ACL, а соединение идёт на тот адрес, куда шёл клиент. Без адреса
+пришлось бы резолвить имя самостоятельно, то есть делать ещё один запрос и
+получать ещё один ответ.
+</p>
+<p>
+Конфигурация для веб- и TLS-трафика:
+</p><pre>
+log /var/log/3proxy.log D
+auth iponly
+allow *
+
+&#35; для сервисов ниже адрес назначения берётся из перенаправления
+transparent
+
+&#35; обычный веб-трафик, перенаправленный сюда с порта 80
+proxy -p3129 -e192.0.2.10
+
+&#35; TLS, перенаправленный сюда с порта 443: без этого у tlspr было бы только
+&#35; имя из handshake, а так есть и адрес
+tlspr -p3143 -e192.0.2.10
+
+notransparent
+</pre>
+<p>
+<b>-e</b> задаёт сервисам собственный адрес для исходящих соединений. Именно
+этот адрес исключается в правилах перенаправления, и это исключение не даёт
+соединениям самого прокси попасть обратно в него. Без исключения соединение,
+которое 3proxy устанавливает к серверу назначения, попадает под то же правило,
+возвращается в 3proxy, и трафик зацикливается. Можно вместо этого запускать
+3proxy под отдельной учётной записью и исключать её - так лучше, если у машины
+один адрес.
+</p>
+
+<p><b>Linux, iptables</b>. Для транзитного трафика:
+</p><pre>
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80  -j REDIRECT --to-ports 3129
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-ports 3143
+</pre>
+<p>
+Трафик самой машины проходит через цепочку OUTPUT, где соединения прокси нужно
+исключить:
+</p><pre>
+&#35; по адресу, с которого сервисы устанавливают соединения
+iptables -t nat -A OUTPUT -p tcp --dport 80 ! -s 192.0.2.10 -j REDIRECT --to-ports 3129
+
+&#35; либо по учётной записи, под которой работает 3proxy
+iptables -t nat -A OUTPUT -p tcp --dport 80 -m owner ! --uid-owner proxy3 \
+    -j REDIRECT --to-ports 3129
+</pre>
+
+<p><b>Linux, nftables</b> (Debian 11+, Ubuntu 22.04+, RHEL 8+, Fedora, Arch):
+</p><pre>
+table ip proxy3 {
+	chain prerouting {
+		type nat hook prerouting priority dstnat; policy accept;
+		iif "eth0" tcp dport 80 redirect to :3129
+		iif "eth0" tcp dport 443 redirect to :3143
+	}
+
+	chain output {
+		type nat hook output priority dstnat; policy accept;
+		meta skuid != "proxy3" tcp dport 80 redirect to :3129
+		meta skuid != "proxy3" tcp dport 443 redirect to :3143
+	}
+}
+</pre>
+<p>
+Загружается через <b>nft -f</b>, сохраняется в <b>/etc/nftables.conf</b>
+(Debian, Ubuntu) или <b>/etc/sysconfig/nftables.conf</b> (RHEL, Fedora). Имя
+таблицы не может начинаться с цифры, поэтому таблица называется не 3proxy.
+</p>
+
+<p><b>Linux, firewalld</b> (RHEL, CentOS Stream, Fedora, openSUSE):
+</p><pre>
+firewall-cmd --permanent --zone=internal --add-forward-port=port=80:proto=tcp:toport=3129
+firewall-cmd --permanent --zone=internal --add-forward-port=port=443:proto=tcp:toport=3143
+firewall-cmd --reload
+</pre>
+<p>
+Исключение для трафика самого прокси в таком виде не задаётся, для него нужно
+прямое правило:
+</p><pre>
+firewall-cmd --permanent --direct --add-rule ipv4 nat OUTPUT 0 \
+    -p tcp --dport 80 -m owner ! --uid-owner proxy3 -j REDIRECT --to-ports 3129
+firewall-cmd --reload
+</pre>
+
+<p><b>Linux, ufw</b> (Ubuntu, Debian). В ufw нет команды для перенаправления,
+правила добавляются в <b>/etc/ufw/before.rules</b> перед блоком <b>*filter</b>:
+</p><pre>
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-ports 3129
+-A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-ports 3143
+COMMIT
+</pre>
+
+<p>
+В Linux 3proxy спрашивает у ядра, куда шло соединение. В BSD он спрашивает у pf,
+который хранит исходный адрес назначения в таблице состояний, через
+<b>/dev/pf</b> - поэтому работают правила <b>rdr</b>, и 3proxy должен иметь
+доступ к этому устройству. Если перенаправление оставляет адрес на самом сокете,
+используется он: так делают OpenBSD <b>divert-to</b> и FreeBSD <b>ipfw fwd</b>.
+</p>
+<p>
+Механизм выбирается автоматически, а команда <b>transparent</b> принимает
+аргумент для случаев, когда его надо зафиксировать: <b>auto</b> (по умолчанию),
+<b>netfilter</b>, <b>pf</b> или <b>socket</b> для чтения адреса с сокета. Режим,
+которого нет в сборке, отвергается, поэтому конфигурация, написанная для другой
+платформы, не запустится вместо того, чтобы молча делать что-то другое.
+</p>
+
+<p><b>FreeBSD, NetBSD, OpenBSD, pf</b>. Перенаправление в <b>/etc/pf.conf</b> с
+исключением адреса, с которого соединяется прокси:
+</p><pre>
+rdr pass on em0 inet proto tcp from ! 192.0.2.10 to any port 80  -&gt; 127.0.0.1 port 3129
+rdr pass on em0 inet proto tcp from ! 192.0.2.10 to any port 443 -&gt; 127.0.0.1 port 3143
+</pre>
+<p>
+Загружается через <b>pfctl -f /etc/pf.conf</b>. 3proxy ищет адрес назначения в
+таблице состояний pf, поэтому ему нужен доступ на чтение к <b>/dev/pf</b>: либо
+запуск от root, либо права на устройство для его учётной записи.
+</p>
+
+<p><b>OpenBSD, divert-to</b> - альтернатива, оставляющая адрес на сокете, доступ
+к <b>/dev/pf</b> при этом не нужен:
+</p><pre>
+pass in on em0 inet proto tcp to any port 80  divert-to 127.0.0.1 port 3129
+pass in on em0 inet proto tcp to any port 443 divert-to 127.0.0.1 port 3143
+</pre>
+
+<p><b>FreeBSD, ipfw</b>. <b>fwd</b> доставляет соединение локально, не переписывая
+его, и адрес тоже остаётся на сокете:
+</p><pre>
+ipfw add fwd 127.0.0.1,3129 tcp from any to any 80  in recv em0
+ipfw add fwd 127.0.0.1,3143 tcp from any to any 443 in recv em0
+</pre>
+
+<p><b>macOS</b>: <b>/dev/pf</b> есть, но заголовочных файлов для него нет,
+поэтому в сборке под macOS нет обращения к pf, а ни <b>divert-to</b>, ни ipfw в
+macOS нет. Транспарентное проксирование там неприменимо, хотя команды в сборке
+присутствуют.
+</p>
 
  <li><a name="PCRE"><i>Как использовать PCRE-фильтрацию (регулярные выражения)</i></a>
 <p>
