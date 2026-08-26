@@ -7,7 +7,9 @@ on:
       - 'include/**'
       - 'tools/buildsite.py'
   schedule:
-    - cron: '51 4 * * *'
+    # every four hours: a documentation change in the content repository has
+    # nothing to announce it here, so this is what publishes it
+    - cron: '51 */4 * * *'
   workflow_dispatch:
 
 permissions:
