@@ -19,3 +19,24 @@ Description: tiny free proxy server
  You can use every proxy as a standalone program (socks, proxy, tcppm, udppm, pop3p) or use combined program (3proxy). Combined proxy additionally supports features like access control, bandwidth limiting, limiting daily/weekly/monthly traffic amount, proxy chaining, log rotation, syslog and ODBC logging, etc.
  It's created to be small, simple and yet very functional.
 
+Package: 3proxy
+Architecture: amd64
+Version: 0.9.9.1-261010165717
+Priority: optional
+Section: net
+Maintainer: z3APA3A <3apa3a@3proxy.org>
+Installed-Size: 1080
+Depends: libc6 (>= 2.34), libpcre2-8-0 (>= 10.32), libssl3 (>= 3.0.0~~alpha1)
+Filename: pool/lts/main/3/3proxy/amd64/3proxy-0.9.9.1.x86_64.deb
+Size: 277800
+MD5sum: 49d7dd7dad3134acbe89f41da2bbd68a
+SHA1: 2cf4155f23ca7d5c38d2916c70d734ef75775279
+SHA256: bb0d733d2d09bc16d3bff61dff5589f37242c3a574ab4f81dd9f748038542735
+SHA512: 72b3e6c1b98054db2a1cf4d2ae8a8fb5f2612c1344b7ad04b5d506b8774f7a4e85f62a19cd22cfb05857ebe4d16d8887ad050cd4e7ee62c2fc1e9b2beaf603eb
+Homepage: https://3proxy.org/
+Description: tiny free proxy server
+ 3Proxy tiny free proxy server is really tiny freeware proxy servers set.
+ It includes HTTP proxy with HTTPS and FTP support, SOCKSv4/SOCKSv4.5/SOCKSv5 proxy (socks/socks.exe), POP3 proxy, SMTP proxy, FTP proxy, caching DNS proxy, TCP and UDP portmappers.
+ You can use every proxy as a standalone program (socks, proxy, tcppm, udppm, pop3p) or use combined program (3proxy). Combined proxy additionally supports features like access control, bandwidth limiting, limiting daily/weekly/monthly traffic amount, proxy chaining, log rotation, syslog and ODBC logging, etc.
+ It's created to be small, simple and yet very functional.
+
