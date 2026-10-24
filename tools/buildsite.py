@@ -196,7 +196,8 @@ def update_news_in_template(template_path, content_dir):
     """
     site_dir = os.path.dirname(os.path.dirname(template_path))
     site_name = os.path.basename(site_dir)
-    is_russian = site_name.endswith('.ru')
+    # the checkout is not named after the site in CI: SITE_LANG says
+    is_russian = os.environ.get('SITE_LANG') == 'ru' or site_name.endswith('.ru')
 
     changelog_name = 'CHANGELOG.rus' if is_russian else 'CHANGELOG'
     changelog_path = os.path.join(content_dir, changelog_name)
