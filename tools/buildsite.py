@@ -253,8 +253,10 @@ def update_news_in_template(template_path, content_dir):
         end_pos = text.find(NEWS_END) + len(NEWS_END)
         text = text[:end_pos] + f'\n<p>\n{old_entry}' + text[end_pos:]
 
-    # Replace between markers with new content
-    text = re.sub(pattern, f'{NEWS_BEGIN}{new_news}{NEWS_END}', text,
+    # Replace between markers with new content: a function, so that the
+    # changelog's backslashes (a UNC path) are not taken for escapes
+    replacement = f'{NEWS_BEGIN}{new_news}{NEWS_END}'
+    text = re.sub(pattern, lambda m: replacement, text,
                   flags=re.DOTALL, count=1)
 
     with open(template_path, 'w', encoding='utf-8') as f:
