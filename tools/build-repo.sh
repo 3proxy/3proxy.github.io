@@ -52,11 +52,15 @@ for k in 3proxy-release-key.asc; do
 	fi
 done
 
+# rpm's own signing command, given what it needs: rpm 4 takes the word after
+# %{__gpg} in it for argv[0], rpm 6 does not, so one of our own breaks on one
+# of them
 GPGBIN="$(command -v gpg)"
 {
 	echo "%_gpg_name $GPG_KEYID"
 	echo "%__gpg $GPGBIN"
-	echo "%__gpg_sign_cmd %{__gpg} gpg --batch --no-armor --pinentry-mode loopback --passphrase-file $PASSFILE --no-secmem-warning --digest-algo sha256 -u \"%{_gpg_name}\" -sbo %{__signature_filename} %{__plaintext_filename}"
+	echo "%_gpg_digest_algo sha256"
+	echo "%_gpg_sign_cmd_extra_args --batch --pinentry-mode loopback --passphrase-file $PASSFILE"
 } > "$HOME/.rpmmacros"
 
 # Branch heads, for deciding which channel a tag belongs to.
