@@ -629,9 +629,13 @@ conditions.</p>
 <i>&lt;radius_server_2</i>[:<i>port</i>][/<i>local_address_2</i>]
 <br>
 Configures RADIUS servers to be used for logging and
-authentication (log and auth types must be set to radius).
-port and local address to use with given server may be
-specified. <br>
+authentication (log and auth types must be set to radius). A
+server is a name or an address, resolved when the
+configuration is read. port and local address to use with
+given server may be specified: the port named is the one
+authentication is asked on, and the accounting requests of
+the same server go to the port after it (1812 and 1813 by
+default). <br>
 Attributes within request: User-Name, Password: (username
 and password if presented by client), Service Type:
 Authenticate-Only, NAS-Port-Type: NAS-Port-Virtual,
@@ -653,9 +657,12 @@ experimental.</p>
 <p style="margin-left:9%; margin-top: 1em"><b>nserver</b>
 <i>&lt;ipaddr&gt;</i>[:<i>port</i>][/<i>tcp</i>] <br>
 Nameserver to use for name resolutions. If none specified
-system routines for name resolution is used. Optional port
-number may be specified. If optional /tcp is added to IP
-address, name resolution is performed over TCP. An IPv6
+system routines for name resolution is used. A server that
+answers with an error (FORMERR, SERVFAIL, REFUSED and the
+like) is passed over for the next one, while a name answered
+with no data, or as not there, ends the search. Optional
+port number may be specified. If optional /tcp is added to
+IP address, name resolution is performed over TCP. An IPv6
 address has to be enclosed in square brackets: <b><br>
 nserver 1.1.1.1 <br>
 nserver [2001:4860:4860::8844] <br>
